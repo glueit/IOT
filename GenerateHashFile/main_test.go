@@ -52,6 +52,7 @@ func TestSliceValidateZeroData(t *testing.T) {
 		return
 	}
 }
+
 func TestSliceValidateZeroSliceLen(t *testing.T) {
 	err := ValidateDataSlicing(RandString(20), 0)
 	if err == nil {
