@@ -60,6 +60,14 @@ func TestSliceValidateZeroSliceLen(t *testing.T) {
 	}
 }
 
+func TestSliceValidateNegativeSliceLen(t *testing.T) {
+	err := ValidateDataSlicing(RandString(20), -1)
+	if err == nil {
+		t.Errorf("Expected error but did not find")
+		return
+	}
+}
+
 func ValidateDataSlicing(testString string, slicingSize int) error {
 
 	testStringBytes := []byte(testString)

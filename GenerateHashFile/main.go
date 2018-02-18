@@ -22,11 +22,12 @@ func SliceTheData(data []byte, sliceSize int) ([][]byte, error) {
 	var slicedData [][]byte
 	var exception error
 
-	if sliceSize == 0 {
+	if sliceSize <= 0 {
 		fmt.Print("sliceSize should be greater than 0")
 		exception = errors.New("sliceSize should be greater than 0")
 		return nil, exception
 	}
+
 	if totalDataLength == 0 {
 		fmt.Print("Data size is 0")
 		exception = errors.New("Data size is 0")
