@@ -10,9 +10,11 @@ import (
 )
 
 func TestGenerateHash(t *testing.T) {
+	var data [][]byte
 	testStringBytes := []byte("Test String")
+	data = append(data, testStringBytes)
 	expectedhash := "A5103F9C0B7D5FF69DDC38607C74E53D4AC120F2"
-	hash := GenerateHash(testStringBytes)
+	hash := GenerateHash(data)
 	if hash == nil {
 		t.Errorf("Hash obtained is null")
 	}
@@ -24,9 +26,11 @@ func TestGenerateHash(t *testing.T) {
 }
 
 func TestGenerateHash256KB(t *testing.T) {
+	var data [][]byte
 	testStringBytes := []byte("Test String")
+	data = append(data, testStringBytes)
 	expectedhash := "A5103F9C0B7D5FF69DDC38607C74E53D4AC120F2"
-	hash := GenerateHash(testStringBytes)
+	hash := GenerateHash(data)
 	if hash == nil {
 		t.Errorf("Hash obtained is null")
 	}

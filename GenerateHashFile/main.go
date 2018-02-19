@@ -3,16 +3,38 @@ package main
 import (
 	"crypto/sha1"
 	"errors"
+	"flag"
 	"fmt"
+	"io/ioutil"
 )
 
+var file = flag.String("file", "E:\\Personal\\Movies\\Theri (2016) HD DVDRip Tamil Full Movie Watch Online - www.TamilYogi.cc - Copy.mp4", "Port to connect to")
+
 func main() {
-	fmt.Print("Hello")
+	rawData, err := ReadData()
+	check(err)
+	slicedData, err := SliceTheData(rawData, 262144)
+	check(err)
+	generatedHashes := GenerateHash(slicedData)
+	fmt.Print(generatedHashes)
 }
 
-func GenerateHash(data []byte) []byte {
-	hash := sha1.Sum(data)
-	return hash[:]
+func GenerateHash(slicedData [][]byte) []byte {
+	var completeHash []byte
+	for i := 0; i < len(slicedData); i++ {
+		hash := sha1.Sum(slicedData[i])
+		completeHash = append(completeHash, hash[:]...)
+	}
+	return completeHash
+}
+
+func ReadData() ([]byte, error) {
+	data, err := ioutil.ReadFile(fmt.Sprintf("%s", file))
+	if err != nil {
+		fmt.Printf("Help message: <executable> -file <file path>")
+		return nil, err
+	}
+	return data, nil
 }
 
 func SliceTheData(data []byte, sliceSize int) ([][]byte, error) {
@@ -44,4 +66,10 @@ func SliceTheData(data []byte, sliceSize int) ([][]byte, error) {
 	}
 
 	return slicedData, nil
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
