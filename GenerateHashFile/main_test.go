@@ -41,6 +41,15 @@ func TestGenerateHash256KB(t *testing.T) {
 	}
 }
 
+func TestGetFileName(t *testing.T) {
+	testStringBytes := []byte("Test String")
+	exectedFileName := "A5103F9C0B7D5FF69DDC38607C74E53D4AC120F2.hash"
+	actualFilelName := GetFileName(testStringBytes)
+
+	if exectedFileName != actualFilelName {
+		t.Errorf("Expected file name %s but found %s", exectedFileName, actualFilelName)
+	}
+}
 func TestSliceTheDataUnEvenData(t *testing.T) {
 	_ = ValidateDataSlicing(RandString(23), 2)
 }

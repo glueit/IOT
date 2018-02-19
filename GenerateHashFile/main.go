@@ -2,21 +2,37 @@ package main
 
 import (
 	"crypto/sha1"
+	"encoding/hex"
 	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"path"
+	"strings"
 )
 
-var file = flag.String("file", "E:\\Personal\\Movies\\Theri (2016) HD DVDRip Tamil Full Movie Watch Online - www.TamilYogi.cc - Copy.mp4", "Port to connect to")
+var inFile = flag.String("Infile", "E:\\Personal\\Movies\\Theri (2016) HD DVDRip Tamil Full Movie Watch Online - www.TamilYogi.cc - Copy.mp4", "File Name to hash")
+var outFolder = flag.String("OutFolder", ".", "Output folder")
 
 func main() {
 	rawData, err := ReadData()
 	check(err)
 	slicedData, err := SliceTheData(rawData, 262144)
 	check(err)
+
+	fileName := GetFileName(rawData)
+	fullpath := path.Join(*outFolder, fileName)
+
 	generatedHashes := GenerateHash(slicedData)
-	fmt.Print(generatedHashes)
+	ioutil.WriteFile(fullpath, generatedHashes, 0777)
+	fmt.Println("hash file generated successfull - ", fileName)
+}
+
+func GetFileName(rawData []byte) string {
+	var data [][]byte
+	data = append(data, rawData)
+	var fileHash = GenerateHash(data)
+	return strings.ToUpper(hex.EncodeToString(fileHash)) + ".hash"
 }
 
 func GenerateHash(slicedData [][]byte) []byte {
@@ -29,7 +45,7 @@ func GenerateHash(slicedData [][]byte) []byte {
 }
 
 func ReadData() ([]byte, error) {
-	data, err := ioutil.ReadFile(fmt.Sprintf("%s", file))
+	data, err := ioutil.ReadFile(fmt.Sprintf("%s", *inFile))
 	if err != nil {
 		fmt.Printf("Help message: <executable> -file <file path>")
 		return nil, err
