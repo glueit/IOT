@@ -1,0 +1,47 @@
+workflow:
+  name: UpdateWorkFlow
+  startTask: preUpgrade
+  task:
+    - taskName: preUpgrade
+      context: null
+      state: 
+        name: complete
+        nextTask: upgrade
+        nextTaskContext: null
+    - taskName: upgrade
+      context: null
+      state: 
+        name: complete
+        nextTask: postUpgrade
+        nextTaskContext: null      
+    - taskName: upgrade
+      context: onFailure
+      state: 
+        name: failed
+        nextTask: rollback
+        nextTaskContext: onFailure      
+    - taskName: upgrade
+      context: onCancelled
+      state: 
+        name: cancelled
+        nextTask: rollback
+        nextTaskContext: onCancelled      
+    - taskName: postUpgrade
+      context: null
+      state: 
+        name: complete
+        nextTask: finish
+        nextTaskContext: null      
+    - taskName: rollback
+      context: onFailure
+      state: 
+        name: complete
+        nextTask: finish
+        nextTaskContext: null
+    - taskName: rollback
+      context: onCancelled
+      state: 
+        name: complete
+        nextTask: finish
+        nextTaskContext: null
+      
